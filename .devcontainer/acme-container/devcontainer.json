@@ -1,0 +1,17 @@
+{
+  "name": "Existing Docker Compose",
+  "dockerComposeFile": ["../../docker-compose.yml"],
+  "service": "acme",
+  "workspaceFolder": "/rails",
+  "shutdownAction":"none",
+  "customizations": {
+		"vscode": {
+			"extensions": [
+        "castwide.solargraph",
+        "rebornix.Ruby",
+        "rubocop.vscode-rubocop",
+        "Shopify.ruby-lsp"
+      ]
+		}
+	}
+}

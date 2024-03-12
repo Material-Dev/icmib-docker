@@ -1,0 +1,246 @@
+version: "3.9"
+services:
+  mongo:
+    init: true
+    image: mongo:5
+    command: --quiet
+    container_name: icmib-mongo
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_DATABASE=icanmakeitbetter_development
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    ports:
+      - "27017:27017"
+    volumes:
+      - ~/projects/icmib/docker_scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ~/projects/data/mongo:/data/db
+    healthcheck:
+      test: mongo --eval 'db.runCommand("ping").ok' --quiet
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # For running a prod DB copy
+  # mongo:
+  #   init: true
+  #   image: mongo:4.4.15
+  #   container_name: mongo
+  #   restart: unless-stopped
+  #   ports:
+  #     - "27017:27017"
+  #   volumes:
+  #     - ~/projects/data/mongo-prod-copy:/data/db
+  #   healthcheck:
+  #     test: mongo --eval 'db.runCommand("ping").ok' --quiet
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 5
+
+  postgres:
+    init: true
+    image: postgres:13.8
+    container_name: icmib-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST_AUTH_METHOD: trust
+      DATABASE_URL: postgres://postgres:postgres@db:5432/icmibr_dev
+    volumes:
+      - ~/projects/data/pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  icmib:
+    init: true
+    build: ~/projects/icmib
+    container_name: icmib
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+      - "7658:7658"
+    volumes:
+      - ~/projects/icmib:/icmib
+      - /icmib/node_modules
+      - ~/projects/icmib/db:/db
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    links:
+      - elasticsearch
+    command: sh -c "bundle exec puma -C config/puma.rb -p 3000"
+    <<: &default
+      image: icmib-icmib
+    # uncomment the below command to run initial setup on build
+    # command: sh -c "./docker_scripts/rails-first-start.sh"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - PGHOST=postgres
+      - MONGODB_USER=admin
+      - MONGODB_PASSWORD=root
+      - MONGODB_URL=mongo:27017
+      - FEEDBACK_URL=http://feedback:4000
+      - ICMU_URL=http://icmu:4001
+      - RAILS_ENV=development
+      - UPGRADE_NEXT=0
+    tty: true
+    stdin_open: true
+
+  webpacker:
+    <<: *default
+    init: true
+    container_name: webpacker
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ~/projects/icmib:/icmib
+      - /icmib/node_modules
+    depends_on:
+      - icmib
+    environment:
+      NODE_ENV: development
+    command: sh -c "yarn webpack"
+
+  workers:
+    <<: *default
+    init: true
+    container_name: workers
+    restart: unless-stopped
+    command: sh -c "bundle exec rake jobs:work"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - PGHOST=postgres
+      - MONGODB_USER=admin
+      - MONGODB_PASSWORD=root
+      - MONGODB_URL=mongo:27017
+      - NUM_WORKERS=2
+      - UPGRADE_NEXT=0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    volumes:
+      - ~/projects/icmib:/icmib
+      - /icmib/node_modules
+    tty: true
+    stdin_open: true
+
+  feedback:
+    init: true
+    build: ~/projects/feedback/
+    container_name: feedback
+    restart: unless-stopped
+    env_file:
+      - "~/projects/feedback/.env"
+    ports:
+      - "4000:4000"
+    volumes:
+      - ~/projects/feedback:/feedback
+      - /feedback/deps
+      - /feedback/_build
+    depends_on:
+      mongo:
+        condition: service_healthy
+    command: sh -c "./docker_scripts/run-phoenix.sh"
+
+  icmu:
+    init: true
+    build: ~/projects/icmu
+    container_name: icmu
+    restart: unless-stopped
+    ports:
+      - "4001:4001"
+    volumes:
+      - ~/projects/icmu:/icmu
+      - /icmu/deps
+      - /icmu/_build
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - MIX_ENV=dev
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: sh -c "./docker_scripts/run-phoenix.sh"
+
+  elasticsearch:
+    init: true
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.2
+    container_name: icmib-elasticsearch
+    restart: unless-stopped
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      ES_JAVA_OPTS: '-Xms256m -Xmx256m'
+      network.bind_host: 0.0.0.0
+      network.host: 0.0.0.0
+      discovery.type: single-node
+
+  maildev:
+    init: true
+    image: maildev/maildev
+    container_name: maildev
+    restart: unless-stopped
+    ports:
+      - 1080:1080
+      - 1025:1025
+    depends_on:
+      - icmib
+
+  acme:
+    init: true
+    build: ~/projects/icmib-acme
+    container_name: icmib-acme
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    volumes:
+      - ~/projects/icmib-acme:/rails
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    command: sh -c "./docker-entrypoint/run-rails.sh"
+    <<: &acme
+      image: app
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - PGHOST=postgres
+      - MONGODB_USER=admin
+      - MONGODB_PASSWORD=root
+      - MONGODB_URL=mongo:27017
+      - RAILS_ENV=development
+      - RAILS_MAX_THREADS=1
+    tty: true
+    stdin_open: true
+
+  acme-css:
+    <<: *acme
+    init: true
+    container_name: icmib-acme-css
+    restart: unless-stopped
+    command: bin/rails tailwindcss:watch
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    volumes:
+      - ~/projects/icmib-acme:/rails
+    tty: true
+    stdin_open: true
