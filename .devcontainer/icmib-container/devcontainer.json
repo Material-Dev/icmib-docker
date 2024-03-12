@@ -1,5 +1,5 @@
 {
-  "name": "Existing Docker Compose",
+  "name": "ICMIB",
   "dockerComposeFile": ["../../docker-compose.yml"],
   "service": "icmib",
   "workspaceFolder": "/icmib",

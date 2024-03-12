@@ -1,0 +1,13 @@
+{
+  "name": "Feedback",
+  "dockerComposeFile": ["../../docker-compose.yml"],
+  "service": "feedback",
+  "workspaceFolder": "/feedback",
+  "shutdownAction":"none",
+  "customizations": {
+		"vscode": {
+			"extensions": [
+      ]
+		}
+	}
+}

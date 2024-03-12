@@ -1,0 +1,13 @@
+{
+  "name": "ICMU",
+  "dockerComposeFile": ["../../docker-compose.yml"],
+  "service": "icmu",
+  "workspaceFolder": "/icmu",
+  "shutdownAction":"none",
+  "customizations": {
+		"vscode": {
+			"extensions": [
+      ]
+		}
+	}
+}
