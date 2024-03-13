@@ -208,7 +208,7 @@ services:
     ports:
       - "3001:3001"
     volumes:
-      - ~/projects/icmib-acme:/rails
+      - ~/projects/icmib-acme:/acme
     depends_on:
       postgres:
         condition: service_healthy
@@ -241,6 +241,6 @@ services:
       mongo:
         condition: service_healthy
     volumes:
-      - ~/projects/icmib-acme:/rails
+      - ~/projects/icmib-acme:/acme
     tty: true
     stdin_open: true

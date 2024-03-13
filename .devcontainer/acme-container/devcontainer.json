@@ -2,7 +2,7 @@
   "name": "ACME",
   "dockerComposeFile": ["../../docker-compose.yml"],
   "service": "acme",
-  "workspaceFolder": "/rails",
+  "workspaceFolder": "/acme",
   "shutdownAction":"none",
   "customizations": {
 		"vscode": {

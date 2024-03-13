@@ -17,5 +17,5 @@ This is a quick way to get up and running with the services we use. It's also a 
 
 ## Misc
 
-VSCode extention - https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack
-Rubymine stuff - https://www.jetbrains.com/help/ruby/connect-to-devcontainer.html#start_container_from_product
+* VSCode extention - https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack
+* Rubymine stuff - https://www.jetbrains.com/help/ruby/connect-to-devcontainer.html#start_container_from_product
