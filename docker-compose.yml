@@ -68,7 +68,7 @@ services:
     volumes:
       - ~/projects/icmib:/icmib
       - /icmib/node_modules
-      - ~/projects/icmib/db:/db
+      - ~/projects/icmib-acme/db:/acme/db
     depends_on:
       postgres:
         condition: service_healthy
