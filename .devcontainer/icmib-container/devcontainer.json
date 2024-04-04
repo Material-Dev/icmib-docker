@@ -8,7 +8,9 @@
 		"vscode": {
 			"extensions": [
         "rubocop.vscode-rubocop",
-        "Shopify.ruby-lsp"
+        "Shopify.ruby-lsp",
+        "Shopify.ruby-extensions-pack",
+        "eamodio.gitlens"
       ]
 		}
 	}
