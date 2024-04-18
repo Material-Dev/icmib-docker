@@ -7,10 +7,10 @@
   "customizations": {
 		"vscode": {
 			"extensions": [
-        "castwide.solargraph",
-        "rebornix.Ruby",
         "rubocop.vscode-rubocop",
-        "Shopify.ruby-lsp"
+        "Shopify.ruby-lsp",
+        "Shopify.ruby-extensions-pack",
+        "eamodio.gitlens"
       ]
 		}
 	}
