@@ -12,7 +12,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ~/projects/icmib/docker_scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ~/projects/icmib/docker-entrypoint/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
       - ~/projects/data/mongo:/data/db
     healthcheck:
       test: mongo --eval 'db.runCommand("ping").ok' --quiet
@@ -75,7 +75,7 @@ services:
         condition: service_healthy
     links:
       - elasticsearch
-    command: sh -c "bundle exec puma -C config/puma.rb -p 3000"
+    command: sh -c "./docker-entrypoint/run-rails.sh"
     <<: &default
       image: icmib-icmib
     # uncomment the below command to run initial setup on build
@@ -132,7 +132,6 @@ services:
         condition: service_healthy
     volumes:
       - ~/projects/icmib:/icmib
-      - /icmib/node_modules
     tty: true
     stdin_open: true
 
@@ -214,6 +213,33 @@ services:
       mongo:
         condition: service_healthy
     command: sh -c "./docker-entrypoint/run-rails.sh"
+    <<: &acme
+      image: app
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - PGHOST=postgres
+      - MONGODB_USER=admin
+      - MONGODB_PASSWORD=root
+      - MONGODB_URL=mongo:27017
+      - RAILS_ENV=development
+      - RAILS_MAX_THREADS=1
+    tty: true
+    stdin_open: true
+
+  acme-workers:
+    init: true
+    build: ~/projects/icmib-acme
+    container_name: acme-workers
+    restart: unless-stopped
+    volumes:
+      - ~/projects/icmib-acme:/acme
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    command: sh -c "bundle exec rake solid_queue:start"
     <<: &acme
       image: app
     environment:
