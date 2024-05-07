@@ -268,3 +268,8 @@ services:
       - ~/projects/icmib-acme:/acme
     tty: true
     stdin_open: true
+
+  stubbed-livestorm-api:
+    image: materialplus/stubbed-livestorm-api:latest
+    ports:
+      - "1975:1975"
