@@ -7,7 +7,6 @@
   "customizations": {
 		"vscode": {
 			"extensions": [
-        "JakeBecker.elixir-ls",
         "eamodio.gitlens"
       ]
 		}
