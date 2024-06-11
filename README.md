@@ -15,6 +15,8 @@ This is a quick way to get up and running with the services we use. It's also a 
 5. From the dropdown, select the service you want to open in a container
 6. Repeat stes 3-5 for each service you want to work on
 
+## Is this your first time? ##
+Howdy!  Check here --> https://github.com/Material-Dev/icmib-handbook/blob/master/files/onboarding_new_dev_environment.md
 ## Misc
 
 * VSCode extention - https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack
