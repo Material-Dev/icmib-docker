@@ -76,11 +76,11 @@ services:
         condition: service_healthy
     links:
       - elasticsearch
-    command: sh -c "./docker-entrypoint/run-rails.sh"
     <<: &default
       image: icmib-icmib
-    # uncomment the below command to run initial setup on build
-    # command: sh -c "./docker_scripts/rails-first-start.sh"
+    # switch these commands to run initial setup on build
+    # command: sh -c "./docker-entrypoint/rails-first-start.sh"
+    command: sh -c "./docker-entrypoint/run-rails.sh"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
