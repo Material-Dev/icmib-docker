@@ -4,13 +4,19 @@
   "service": "icmib",
   "workspaceFolder": "/icmib",
   "shutdownAction":"none",
+  "containerEnv": {
+    "USER": "${localEnv:USER}"
+  },
+"runArgs": ["--init"],
+"mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" ],
   "customizations": {
 		"vscode": {
 			"extensions": [
         "rubocop.vscode-rubocop",
         "Shopify.ruby-lsp",
         "Shopify.ruby-extensions-pack",
-        "eamodio.gitlens"
+        "eamodio.gitlens",
+        "ms-azuretools.vscode-docker"
       ]
 		}
 	}
