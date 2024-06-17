@@ -20,7 +20,7 @@ This is a quick way to get up and running with the services we use. It's also a 
 Some of the images are in private repos and we need to authenticate to pull them. If you're getting a build error, you may need to add your ssh keys to the default ssh agent by running:
 
   ```bash
-  ssh-add --apple-use-keychain ~/.ssh/id_rsa
+  ssh-add --apple-use-keychain
   ```
 
 ## Is this your first time? ##
