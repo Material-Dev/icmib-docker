@@ -16,7 +16,8 @@
         "Shopify.ruby-lsp",
         "Shopify.ruby-extensions-pack",
         "eamodio.gitlens",
-        "ms-azuretools.vscode-docker"
+        "ms-azuretools.vscode-docker",
+        "bradlc.vscode-tailwindcss"
       ]
     }
   }
