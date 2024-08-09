@@ -212,7 +212,7 @@ services:
         condition: service_healthy
       mongo:
         condition: service_healthy
-    command: sh -c "./docker-entrypoint/run-rails.sh"
+    command: sleep infinity
     <<: &acme
       image: app
     environment:
