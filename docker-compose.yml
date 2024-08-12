@@ -91,6 +91,8 @@ services:
       - ICMU_URL=http://icmu:4001
       - RAILS_ENV=development
       - UPGRADE_NEXT=0
+      - AWS_S3_KEY=123
+      - AWS_S3_SECRET=123
     tty: true
     stdin_open: true
 
@@ -125,6 +127,8 @@ services:
       - MONGODB_URL=mongo:27017
       - NUM_WORKERS=2
       - UPGRADE_NEXT=0
+      - AWS_S3_KEY=123
+      - AWS_S3_SECRET=123
     depends_on:
       postgres:
         condition: service_healthy
@@ -223,6 +227,8 @@ services:
       - MONGODB_PASSWORD=root
       - MONGODB_URL=mongo:27017
       - RAILS_ENV=development
+      - AWS_S3_KEY=123
+      - AWS_S3_SECRET=123
     tty: true
     stdin_open: true
 
