@@ -8,7 +8,6 @@
     "USER": "${localEnv:USER}"
   },
 "runArgs": ["--init"],
-"postStartCommand": "docker-entrypoint/run-rails.sh",
 "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" ],
   "customizations": {
 		"vscode": {
