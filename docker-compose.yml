@@ -78,8 +78,7 @@ services:
     <<: &default
       image: icmib-icmib
     # switch these commands to run initial setup on build
-    # command: sh -c "./docker-entrypoint/rails-first-start.sh"
-    command: sleep infinity
+    command: sh -c "./docker-entrypoint/run-rails.sh || sleep infinity"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -216,7 +215,7 @@ services:
         condition: service_healthy
       mongo:
         condition: service_healthy
-    command: sleep infinity
+    command: sh -c "./docker-entrypoint/run-rails.sh || sleep infinity"
     <<: &acme
       image: app
     environment:
