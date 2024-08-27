@@ -152,3 +152,5 @@ Style/StringChars:
 
 Style/SwapValues:
   Enabled: false
+
+inherit_from: .rubocop_overrides.yml
