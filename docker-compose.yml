@@ -68,6 +68,7 @@ services:
       - ~/projects/icmib:/icmib
       - /icmib/node_modules
       - ~/projects/icmib-acme/db:/acme/db
+      - ./.rubocop.yml:/icmib/.rubocop.yml
     depends_on:
       postgres:
         condition: service_healthy
@@ -210,6 +211,7 @@ services:
       - "3001:3001"
     volumes:
       - ~/projects/icmib-acme:/acme
+      - ./.rubocop.yml:/acme/.rubocop.yml
     depends_on:
       postgres:
         condition: service_healthy

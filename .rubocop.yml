@@ -1,0 +1,154 @@
+## https://docs.rubocop.org/rubocop/cops.html ##
+
+AllCops:
+  TargetRubyVersion: 3.3.2
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: single_quotes
+  Exclude: ['db/schema.rb']
+
+Gemspec/OrderedDependencies:
+  Enabled: false
+
+Layout/FirstParameterIndentation:
+  EnforcedStyle: consistent
+
+Layout/LineEndStringConcatenationIndentation:
+  Enabled: false
+
+Layout/MultilineMethodCallBraceLayout:
+  EnforcedStyle: new_line
+
+Layout/SpaceBeforeBrackets:
+  Enabled: false
+
+Lint/AmbiguousAssignment:
+  Enabled: false
+
+Lint/AmbiguousRange:
+  Enabled: false
+
+Lint/DeprecatedConstants:
+  Enabled: false
+
+Lint/DuplicateBranch:
+  Enabled: false
+
+Lint/DuplicateRegexpCharacterClassElement:
+  Enabled: false
+
+Lint/EmptyBlock:
+  Enabled: false
+
+Lint/EmptyClass:
+  Enabled: false
+
+Lint/EmptyInPattern:
+  Enabled: false
+
+Lint/LambdaWithoutLiteralBlock:
+  Enabled: false
+
+Lint/MissingSuper:
+  Enabled: false
+
+Lint/NoReturnInBeginEndBlocks:
+  Enabled: false
+
+Lint/NumberedParameterAssignment:
+  Enabled: false
+
+Lint/OrAssignmentToConstant:
+  Enabled: false
+
+Lint/RedundantDirGlobSort:
+  Enabled: false
+
+Lint/SymbolConversion:
+  Enabled: false
+
+Lint/ToEnumArguments:
+  Enabled: false
+
+Lint/TripleQuotes:
+  Enabled: false
+
+Lint/UnexpectedBlockArity:
+  Enabled: false
+
+Lint/UnmodifiedReduceAccumulator:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude: ['test/**/*.rb', 'config/routes.rb', 'db/schema.rb', 'db/seeds/*.rb']
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 40
+  CountAsOne: ['array', 'hash', 'heredoc', 'method_call']
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Naming/InclusiveLanguage:
+  Enabled: false
+
+Style/ArgumentsForwarding:
+  Enabled: false
+
+Style/CollectionCompact:
+  Enabled: false
+
+Style/DocumentDynamicEvalDefinition:
+  Enabled: false
+
+Style/EndlessMethod:
+  Enabled: false
+
+Style/HashConversion:
+  Enabled: false
+
+Style/HashExcept:
+  Enabled: false
+
+Style/IfWithBooleanLiteralBranches:
+  Enabled: false
+
+Style/InPatternThen:
+  Enabled: false
+
+Style/MultilineInPatternThen:
+  Enabled: false
+
+Style/NegatedIfElseCondition:
+  Enabled: false
+
+Style/NilLambda:
+  Enabled: false
+
+Style/QuotedSymbols:
+  Enabled: false
+
+Style/RedundantArgument:
+  Enabled: false
+
+Style/RedundantSelfAssignmentBranch:
+  Enabled: false
+
+Style/StringChars:
+  Enabled: false
+
+Style/SwapValues:
+  Enabled: false
