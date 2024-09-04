@@ -38,7 +38,7 @@ services:
 
   postgres:
     init: true
-    image: postgres:13.8
+    image: postgres:16.4
     container_name: icmib-postgres
     restart: unless-stopped
     ports:
