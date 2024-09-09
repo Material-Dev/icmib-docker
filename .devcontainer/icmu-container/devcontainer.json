@@ -14,7 +14,8 @@
 			"extensions": [
         "eamodio.gitlens",
         "ms-azuretools.vscode-docker",
-        "JakeBecker.elixir-ls"
+        "JakeBecker.elixir-ls",
+        "Gruntfuggly.todo-tree"
       ]
 		}
 	}

@@ -17,7 +17,8 @@
         "Shopify.ruby-extensions-pack",
         "eamodio.gitlens",
         "ms-azuretools.vscode-docker",
-        "bradlc.vscode-tailwindcss"
+        "bradlc.vscode-tailwindcss",
+        "Gruntfuggly.todo-tree"
       ]
     }
   }
