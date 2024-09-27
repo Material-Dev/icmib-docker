@@ -2,11 +2,11 @@
 
 AllCops:
   TargetRubyVersion: 3.3.2
+  Exclude: ['db/schema.rb', 'config/routes.rb']
 
 Style/StringLiterals:
   Enabled: true
   EnforcedStyle: single_quotes
-  Exclude: ['db/schema.rb']
 
 Gemspec/OrderedDependencies:
   Enabled: false
@@ -84,7 +84,7 @@ Metrics/AbcSize:
   Enabled: false
 
 Metrics/BlockLength:
-  Exclude: ['test/**/*.rb', 'config/routes.rb', 'db/schema.rb', 'db/seeds/*.rb']
+  Exclude: ['test/**/*.rb', 'db/seeds/*.rb']
 
 Metrics/ClassLength:
   Enabled: false
