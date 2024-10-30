@@ -67,7 +67,7 @@ services:
     volumes:
       - ~/projects/icmib:/icmib
       - /icmib/node_modules
-      - ~/projects/icmib-acme/db:/acme/db
+      - ~/projects/qual-connect/db:/qual-connect/db
       - ./.rubocop.yml:/icmib/.rubocop.yml
     depends_on:
       postgres:
@@ -202,23 +202,23 @@ services:
     depends_on:
       - icmib
 
-  acme:
+  qual-connect:
     init: true
-    build: ~/projects/icmib-acme
-    container_name: icmib-acme
+    build: ~/projects/qual-connect
+    container_name: qual-connect
     restart: unless-stopped
     ports:
       - "3001:3001"
     volumes:
-      - ~/projects/icmib-acme:/acme
-      - ./.rubocop.yml:/acme/.rubocop.yml
+      - ~/projects/qual-connect:/qual-connect
+      - ./.rubocop.yml:/qual-connect/.rubocop.yml
     depends_on:
       postgres:
         condition: service_healthy
       mongo:
         condition: service_healthy
     command: sh -c "./docker-entrypoint/run-rails.sh || sleep infinity"
-    <<: &acme
+    <<: &qual-connect
       image: app
     environment:
       - POSTGRES_USER=postgres
@@ -233,20 +233,20 @@ services:
     tty: true
     stdin_open: true
 
-  acme-workers:
+  qual-connect-workers:
     init: true
-    build: ~/projects/icmib-acme
-    container_name: acme-workers
+    build: ~/projects/qual-connect
+    container_name: qual-connect-workers
     restart: unless-stopped
     volumes:
-      - ~/projects/icmib-acme:/acme
+      - ~/projects/qual-connect:/qual-connect
     depends_on:
       postgres:
         condition: service_healthy
       mongo:
         condition: service_healthy
     command: sh -c "bundle exec rake solid_queue:start"
-    <<: &acme
+    <<: &qual-connect
       image: app
     environment:
       - POSTGRES_USER=postgres
@@ -259,10 +259,10 @@ services:
     tty: true
     stdin_open: true
 
-  acme-css:
-    <<: *acme
+  qual-connect-css:
+    <<: *qual-connect
     init: true
-    container_name: icmib-acme-css
+    container_name: qual-connect-css
     restart: unless-stopped
     command: bin/rails tailwindcss:watch
     depends_on:
@@ -271,7 +271,7 @@ services:
       mongo:
         condition: service_healthy
     volumes:
-      - ~/projects/icmib-acme:/acme
+      - ~/projects/qual-connect:/qual-connect
     tty: true
     stdin_open: true
 
