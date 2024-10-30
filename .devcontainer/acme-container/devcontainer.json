@@ -1,8 +1,8 @@
 {
-  "name": "ACME",
+  "name": "QualConnect",
   "dockerComposeFile": ["../../docker-compose.yml"],
-  "service": "acme",
-  "workspaceFolder": "/acme",
+  "service": "qual-connect",
+  "workspaceFolder": "/qual-connect",
   "shutdownAction":"none",
   "containerEnv": {
     "USER": "${localEnv:USER}"
