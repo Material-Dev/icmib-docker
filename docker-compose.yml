@@ -69,11 +69,6 @@ services:
       - /icmib/node_modules
       - ~/projects/qual-connect/db:/qual-connect/db
       - ./.rubocop.yml:/icmib/.rubocop.yml
-    depends_on:
-      postgres:
-        condition: service_healthy
-      mongo:
-        condition: service_healthy
     links:
       - elasticsearch
     <<: &default
@@ -129,11 +124,6 @@ services:
       - UPGRADE_NEXT=0
       - AWS_S3_KEY=123
       - AWS_S3_SECRET=123
-    depends_on:
-      postgres:
-        condition: service_healthy
-      mongo:
-        condition: service_healthy
     volumes:
       - ~/projects/icmib:/icmib
     tty: true
@@ -152,9 +142,6 @@ services:
       - ~/projects/feedback:/feedback
       - /feedback/deps
       - /feedback/_build
-    depends_on:
-      mongo:
-        condition: service_healthy
     command: sh -c "./docker_scripts/run-phoenix.sh"
 
   icmu:
@@ -172,9 +159,6 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - MIX_ENV=dev
-    depends_on:
-      postgres:
-        condition: service_healthy
     command: sh -c "./docker_scripts/run-phoenix.sh"
 
   elasticsearch:
@@ -212,11 +196,6 @@ services:
     volumes:
       - ~/projects/qual-connect:/qual-connect
       - ./.rubocop.yml:/qual-connect/.rubocop.yml
-    depends_on:
-      postgres:
-        condition: service_healthy
-      mongo:
-        condition: service_healthy
     command: sh -c "./docker-entrypoint/run-rails.sh || sleep infinity"
     <<: &qual-connect
       image: app
@@ -240,11 +219,6 @@ services:
     restart: unless-stopped
     volumes:
       - ~/projects/qual-connect:/qual-connect
-    depends_on:
-      postgres:
-        condition: service_healthy
-      mongo:
-        condition: service_healthy
     command: sh -c "bundle exec rake solid_queue:start"
     <<: &qual-connect
       image: app
@@ -264,12 +238,7 @@ services:
     init: true
     container_name: qual-connect-css
     restart: unless-stopped
-    command: bin/rails tailwindcss:watch
-    depends_on:
-      postgres:
-        condition: service_healthy
-      mongo:
-        condition: service_healthy
+    command: bin/rails tailwindcss:watch[debug,poll]
     volumes:
       - ~/projects/qual-connect:/qual-connect
     tty: true
@@ -279,3 +248,12 @@ services:
     image: materialplus/stubbed-livestorm-api:latest
     ports:
       - "1975:1975"
+
+  ollama:
+    init: true
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    command: sh -c "ollama run llama3"
