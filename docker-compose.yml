@@ -254,6 +254,9 @@ services:
     image: ollama/ollama:latest
     container_name: ollama
     restart: unless-stopped
+    tty: true
+    stdin_open: true
     ports:
       - "11434:11434"
-    command: sh -c "ollama run llama3"
+    volumes:
+      - ~/projects/ollama:/root/.ollama
