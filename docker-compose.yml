@@ -14,27 +14,17 @@ services:
     volumes:
       - ~/projects/icmib/docker-entrypoint/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
       - ~/projects/data/mongo:/data/db
-    healthcheck:
-      test: mongo --eval 'db.runCommand("ping").ok' --quiet
-      interval: 5s
-      timeout: 5s
-      retries: 5
 
   # For running a prod DB copy
   # mongo:
   #   init: true
-  #   image: mongo:4.4.15
+  #   image: mongo:5
   #   container_name: mongo
   #   restart: unless-stopped
   #   ports:
   #     - "27017:27017"
   #   volumes:
   #     - ~/projects/data/mongo-prod-copy:/data/db
-  #   healthcheck:
-  #     test: mongo --eval 'db.runCommand("ping").ok' --quiet
-  #     interval: 5s
-  #     timeout: 5s
-  #     retries: 5
 
   postgres:
     init: true
@@ -51,11 +41,6 @@ services:
       DATABASE_URL: postgres://postgres:postgres@db:5432/icmibr_dev
     volumes:
       - ~/projects/data/pg:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
 
   icmib:
     init: true
@@ -69,11 +54,6 @@ services:
       - /icmib/node_modules
       - ~/projects/qual-connect/db:/qual-connect/db
       - ./.rubocop.yml:/icmib/.rubocop.yml
-    depends_on:
-      postgres:
-        condition: service_healthy
-      mongo:
-        condition: service_healthy
     links:
       - elasticsearch
     <<: &default
@@ -129,11 +109,6 @@ services:
       - UPGRADE_NEXT=0
       - AWS_S3_KEY=123
       - AWS_S3_SECRET=123
-    depends_on:
-      postgres:
-        condition: service_healthy
-      mongo:
-        condition: service_healthy
     volumes:
       - ~/projects/icmib:/icmib
     tty: true
@@ -152,9 +127,6 @@ services:
       - ~/projects/feedback:/feedback
       - /feedback/deps
       - /feedback/_build
-    depends_on:
-      mongo:
-        condition: service_healthy
     command: sh -c "./docker_scripts/run-phoenix.sh"
 
   icmu:
@@ -172,9 +144,6 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - MIX_ENV=dev
-    depends_on:
-      postgres:
-        condition: service_healthy
     command: sh -c "./docker_scripts/run-phoenix.sh"
 
   elasticsearch:
@@ -212,11 +181,6 @@ services:
     volumes:
       - ~/projects/qual-connect:/qual-connect
       - ./.rubocop.yml:/qual-connect/.rubocop.yml
-    depends_on:
-      postgres:
-        condition: service_healthy
-      mongo:
-        condition: service_healthy
     command: sh -c "./docker-entrypoint/run-rails.sh || sleep infinity"
     <<: &qual-connect
       image: app
@@ -240,11 +204,6 @@ services:
     restart: unless-stopped
     volumes:
       - ~/projects/qual-connect:/qual-connect
-    depends_on:
-      postgres:
-        condition: service_healthy
-      mongo:
-        condition: service_healthy
     command: sh -c "bundle exec rake solid_queue:start"
     <<: &qual-connect
       image: app
@@ -265,11 +224,6 @@ services:
     container_name: qual-connect-css
     restart: unless-stopped
     command: bin/rails tailwindcss:watch
-    depends_on:
-      postgres:
-        condition: service_healthy
-      mongo:
-        condition: service_healthy
     volumes:
       - ~/projects/qual-connect:/qual-connect
     tty: true
