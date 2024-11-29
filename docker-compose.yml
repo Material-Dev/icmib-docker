@@ -16,27 +16,17 @@ services:
     volumes:
       - ~/projects/icmib/docker-entrypoint/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
       - ~/projects/data/mongo:/data/db
-    healthcheck:
-      test: mongo --eval 'db.runCommand("ping").ok' --quiet
-      interval: 5s
-      timeout: 5s
-      retries: 5
 
   # For running a prod DB copy
   # mongo:
   #   init: true
-  #   image: mongo:4.4.15
+  #   image: mongo:5
   #   container_name: mongo
   #   restart: unless-stopped
   #   ports:
   #     - "27017:27017"
   #   volumes:
   #     - ~/projects/data/mongo-prod-copy:/data/db
-  #   healthcheck:
-  #     test: mongo --eval 'db.runCommand("ping").ok' --quiet
-  #     interval: 5s
-  #     timeout: 5s
-  #     retries: 5
 
   postgres:
     init: true
@@ -53,11 +43,6 @@ services:
       DATABASE_URL: postgres://postgres:postgres@db:5432/icmibr_dev
     volumes:
       - ~/projects/data/pg:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
 
   icmib:
     init: true
