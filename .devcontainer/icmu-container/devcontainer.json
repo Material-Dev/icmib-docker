@@ -15,7 +15,9 @@
         "eamodio.gitlens",
         "ms-azuretools.vscode-docker",
         "JakeBecker.elixir-ls",
-        "Gruntfuggly.todo-tree"
+        "Gruntfuggly.todo-tree",
+        "GitHub.copilot",
+        "GitHub.copilot-chat"
       ]
 		}
 	}
