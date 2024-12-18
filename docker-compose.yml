@@ -28,7 +28,7 @@ services:
 
   postgres:
     init: true
-    image: postgres:16.4
+    image: pgvector/pgvector:pg16
     container_name: icmib-postgres
     restart: unless-stopped
     ports:
@@ -223,7 +223,7 @@ services:
     init: true
     container_name: qual-connect-css
     restart: unless-stopped
-    command: bin/rails tailwindcss:watch
+    command: bin/rails tailwindcss:watch[debug,poll]
     volumes:
       - ~/projects/qual-connect:/qual-connect
     tty: true
@@ -233,3 +233,19 @@ services:
     image: materialplus/stubbed-livestorm-api:latest
     ports:
       - "1975:1975"
+
+  ollama:
+    init: true
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+    ports:
+      - "11434:11434"
+    volumes:
+      - ~/projects/ollama:/root/.ollama
+    profiles:
+      - ollama-mamma
