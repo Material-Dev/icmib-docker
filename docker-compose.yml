@@ -69,6 +69,9 @@ services:
       - MONGODB_URL=mongo:27017
       - FEEDBACK_URL=http://feedback:4000
       - ICMU_URL=http://icmu:4001
+      - TANGO_URL=http://stubbed-tango-api:1976
+      - TANGO_USERNAME=user
+      - TANGO_PASSWORD=test
       - RAILS_ENV=development
       - UPGRADE_NEXT=0
       - AWS_S3_KEY=123
@@ -233,3 +236,15 @@ services:
     image: materialplus/stubbed-livestorm-api:latest
     ports:
       - "1975:1975"
+
+  stubbed-tango-api:
+    # build:  ## Build from local Dockerfile for active development
+    #     dockerfile: Dockerfile
+    #     context: ../stubbed-tango-api
+    build:
+      context: git@github.com:Material-Dev/stubbed-tango-api.git
+      dockerfile: Dockerfile
+      ssh:
+        - default
+    ports:
+      - "1976:1976"
